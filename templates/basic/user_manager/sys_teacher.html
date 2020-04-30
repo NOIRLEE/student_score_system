@@ -1,0 +1,201 @@
+{% extends 'basic/base.html' %}
+
+{% block content_nav_home %}系统管理{% endblock %}
+{% block content_nav %}
+    <li>用户</li>
+{% endblock %}
+
+{% block content %}
+    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#add1" style="margin: 5px 0">添加</a>
+     <form method="get">
+    <input type="text" name="teacher_id" style="margin: 10px">
+    <button   style="margin: 15px">搜索</button>
+    </form>
+    <table class="table table-bordered table-striped text-center bg-info">
+        <thead>
+        <tr class="info">
+            <th class="text-center">id</th>
+            <th class="text-center">name</th>
+            <th class="text-center">auth_string</th>
+            <th class="text-center">phone</th>
+            <th class="text-center">job_id</th>
+            <th class="text-center">pic</th>
+            <th class="text-center">email</th>
+            <th class="text-center" width="200px">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for teacher  in teachers %}
+            <tr>
+                <td>{{ teacher.id }}</td>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.auth_string }}</td>
+                <td>{{ teacher.phone }}</td>
+                <td>{{ teacher.job_num }}</td>
+                <td>{{ teacher.pic }}</td>
+                <td>{{ teacher.email }}</td>
+
+                <td>
+                    <a href="#" class="btn btn-info btn-sm" data-toggle="modal"
+                       onclick="edit({{ teacher.id }}, '{{ teacher.name }}','{{ teacher.auth_string }}','{{ teacher.phone }}','{{ teacher.job_num }}', '{{ teacher.pic }}', '{{ teacher.email  }}')">编辑</a>
+                    <a onclick="delete_role({{ teacher.id }}, '{{ teacher.name }}')" class="btn btn-danger btn-sm">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!--添加-->
+    <div class="modal fade" id="add1" tabindex="-1" user="dialog" aria-labelledby="add11">
+        <div class="modal-dialog" user="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="add11">添加</h4>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <ul>
+                            <li>
+                                <label><span>姓名 ：</span></label>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <label><span>密码 ：</span></label>
+                                <input type="text" name="auth_string"/>
+                            </li>
+                            <li>
+                                <label><span>手机号 ：</span></label>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <label><span>工号 ：</span></label>
+                                <input type="text" name="job_num"/>
+                            </li>
+                            <li>
+                                <label><span>照片 ：</span></label>
+                                <input type="text" name="pic"/>
+                            </li>
+                            <li>
+                                <label><span>邮箱 ：</span></label>
+                                <input type="text" name="email"/>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary btn-sm">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑 -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="add11">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="add11">编辑</h4>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <ul>
+                            <li>
+                                <label><span>用户ID ：</span></label>
+                                <input id="edit_id" type="text" name="id"/>
+                            </li>
+                            <li>
+                                <label><span>姓名 ：</span></label>
+                                <input id="edit_name" type="text" name="name"/>
+                            </li>
+                             <li>
+                                <label><span>密码 ：</span></label>
+                                <input id="edit_name" type="text" name="auth_string"/>
+                            </li>
+                             <li>
+                                <label><span>手机号 ：</span></label>
+                                <input id="edit_name" type="text" name="phone"/>
+                            </li>
+                             <li>
+                                <label><span>工号 ：</span></label>
+                                <input id="edit_name" type="text" name="job_num"/>
+                            </li>
+                            <li>
+                                <label><span>照片 ：</span></label>
+                                <input id="edit_auth_string" type="text" name="pic"/>
+                            </li>
+                            <li>
+                                <label><span>邮箱 ：</span></label>
+                                <input id="edit_email" type="text" name="email"/>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary btn-sm">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示 -->
+    <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="add11">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="add11">提示信息</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <h4 id="msg"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                    <button onclick="delete_ajax()" class="btn btn-warning btn-sm">确定</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function edit(id, name, code) {
+            $('#edit_id').val(id);
+            $('#edit_name').val(name);
+            $('#edit_code').val(code);
+
+            $('#edit').modal('show');
+        }
+
+        var role_id = 0;
+        function delete_role(roleid, role_name) {
+            role_id = roleid;
+            $('#msg').html('是否删除 '+ role_name+" ?");
+            $('#info').modal('toggle');
+        }
+
+        function delete_ajax() {
+            url = window.location.href + "?id=" + role_id;
+            fetch(url, {
+                method: 'DELETE'
+            }).then(resp => resp.json()).then(data => {
+                alert(data.msg);
+                if (data.status == 0) {
+                    // 刷新当前页面
+                    open(window.location.href, target = '_self');
+                }
+            })
+        }
+    </script>
+{% endblock %}

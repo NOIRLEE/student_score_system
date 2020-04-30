@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}主页{% endblock %}-成绩管理系统</title>
+
+    {% include 'basic/css.html' %}
+
+    {% block css %}
+
+    {% endblock %}
+</head>
+<body>
+{% include 'basic/top.html' %}
+
+<section>
+    <div class="container-fluid">
+        <div class="row ">
+            {% if request.session.login_user.sysuser == 'manager'  %}
+            {% include 'basic/menu_manager.html' %}
+            {% endif %}
+        {% if request.session.login_user.sysuser == 'student'  %}
+            {% include 'basic/menu_student.html' %}
+            {% endif %}
+        {% if request.session.login_user.sysuser == 'teacher'  %}
+            {% include 'basic/menu_teacher.html' %}
+            {% endif %}
+
+            <div class="col-xs-10">
+                <br/>
+                    <ol class="breadcrumb">
+                        <li class="active"><span class="glyphicon glyphicon-home"></span> {% block content_nav_home %}首页{% endblock %}</li>
+                        {% block content_nav %}
+
+                        {% endblock %}
+                    </ol>
+
+                {% block content %}
+                    <h1 class="text-center text-white">成绩管理系统</h1>
+                {% endblock %}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<footer class="bg-primary navbar-fixed-bottom">
+    <p class="text-center text-white">版权所有&copy;西安理工大学高科学院16级软件工程李佳豪</p>
+</footer>
+
+{% include 'basic/js.html' %}
+<script>
+    function init_es() {
+        fetch('/init_es/')
+            .then(resp=>resp.json())
+            .then(data=>{
+                alert(data.msg);
+            })
+    }
+</script>
+{% block js %}
+
+{% endblock %}
+
+</body>
+</html>

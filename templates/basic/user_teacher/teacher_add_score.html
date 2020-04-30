@@ -1,0 +1,178 @@
+{% extends 'basic/base.html' %}
+
+{% block content_nav_home %}系统管理{% endblock %}
+{% block content_nav %}
+    <li>用户</li>
+{% endblock %}
+
+{% block content %}
+    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#add1" style="margin: 5px 0">添加</a>
+    <form method="get">
+    <input type="text" name="student_id" style="margin: 10px">
+    <button   style="margin: 15px">搜索</button>
+    </form>
+    <table class="table table-bordered table-striped text-center bg-info">
+        <thead>
+        <tr class="info">
+            <th class="text-center">id</th>
+            <th class="text-center">学生id</th>
+            <th class="text-center">学生姓名</th>
+            <th class="text-center">科目id</th>
+            <th class="text-center">科目名称</th>
+            <th class="text-center">分数值</th>
+
+            <th class="text-center" width="200px">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for score  in scores %}
+            <tr>
+                <td>{{ score.id }}</td>
+                <td>{{ score.student_id }}</td>
+                <td>{{ score.student_name }}</td>
+                <td>{{ score.subject_id }}</td>
+                <td>{{ score.subject_name }}</td>
+                <td>{{ score.value }}</td>
+
+                <td>
+                    <a href="#" class="btn btn-info btn-sm" data-toggle="modal"
+                       onclick="edit({{ score.id }}, '{{ score.student_id }}','{{ score.subject_id }}','{{ score.value }}')">编辑</a>
+{#                    <a onclick="delete_role({{ score.id }}, '{{ score.name }}')" class="btn btn-danger btn-sm">删除</a>#}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!--添加-->
+    <div class="modal fade" id="add1" tabindex="-1" user="dialog" aria-labelledby="add11">
+        <div class="modal-dialog" user="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="add11">添加</h4>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <ul>
+                            <li>
+                                <label><span>学生id ：</span></label>
+                                <input type="text" name="student_id"/>
+                            </li>
+                            <li>
+                                <label><span>科目id ：</span></label>
+                                <input type="text" name="subject_id"/>
+                            </li>
+                            <li>
+                                <label><span>分数值 ：</span></label>
+                                <input type="text" name="value"/>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary btn-sm">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑 -->
+    <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="add11">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="add11">编辑</h4>
+                </div>
+                <form method="post">
+                    <div class="modal-body">
+                        <ul>
+                            <li>
+                                <label><span>分数ID ：</span></label>
+                                <input id="edit_id" type="text" name="id"/>
+                            </li>
+                            <li>
+                                <label><span>学生id ：</span></label>
+                                <input id="edit_name" type="text" name="student_id"/>
+                            </li>
+                             <li>
+                                <label><span>科目id ：</span></label>
+                                <input id="edit_name" type="text" name="subject_id"/>
+                            </li>
+                            <li>
+                                <label><span>分数值 ：</span></label>
+                                <input id="edit_name" type="text" name="value"/>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary btn-sm">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示 -->
+    <div class="modal fade" id="info" tabindex="-1" role="dialog" aria-labelledby="add11">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="add11">提示信息</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <h4 id="msg"></h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">取消</button>
+                    <button onclick="delete_ajax()" class="btn btn-warning btn-sm">确定</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+        function edit(id, name, code) {
+            $('#edit_id').val(id);
+            $('#edit_name').val(name);
+            $('#edit_code').val(code);
+
+            $('#edit').modal('show');
+        }
+
+        var role_id = 0;
+        function delete_role(roleid, role_name) {
+            role_id = roleid;
+            $('#msg').html('是否删除 '+ role_name+" ?");
+            $('#info').modal('toggle');
+        }
+
+        function delete_ajax() {
+            url = window.location.href + "?id=" + role_id;
+            fetch(url, {
+                method: 'DELETE'
+            }).then(resp => resp.json()).then(data => {
+                alert(data.msg);
+                if (data.status == 0) {
+                    // 刷新当前页面
+                    open(window.location.href, target = '_self');
+                }
+            })
+        }
+    </script>
+{% endblock %}
